@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- item为实体类的类名 -->
+    <string-array name="db_table">
+        
+    </string-array>
+
+</resources>
