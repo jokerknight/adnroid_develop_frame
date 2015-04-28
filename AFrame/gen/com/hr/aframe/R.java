@@ -9,26 +9,32 @@ package com.hr.aframe;
 
 public final class R {
     public static final class anim {
-        public static final int anim_activity_enter=0x7f030000;
-        public static final int anim_activity_leave=0x7f030001;
+        public static final int anim_activity_enter=0x7f040000;
+        public static final int anim_activity_leave=0x7f040001;
     }
     public static final class array {
         /**  item为实体类的类名 
          */
-        public static final int db_table=0x7f070000;
+        public static final int db_table=0x7f080000;
     }
     public static final class attr {
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
     }
+    public static final class id {
+        public static final int test=0x7f090000;
+    }
+    public static final class layout {
+        public static final int test=0x7f030000;
+    }
     public static final class raw {
-        public static final int config=0x7f040000;
+        public static final int config=0x7f050000;
     }
     public static final class string {
-        public static final int app_name=0x7f050000;
+        public static final int app_name=0x7f060000;
     }
     public static final class style {
-        public static final int AppTheme=0x7f060000;
+        public static final int AppTheme=0x7f070000;
     }
 }
