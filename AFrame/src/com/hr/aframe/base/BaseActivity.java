@@ -1,6 +1,7 @@
 package com.hr.aframe.base;
 
 import java.lang.reflect.Field;
+import java.util.UUID;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -40,7 +41,7 @@ public abstract class BaseActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(getLayoutResID());
 		mContext = this;
-		mBaseGsonService = new BaseGsonService(this);
+		mBaseGsonService = new BaseGsonService(this, generateTag());
 		ActivityStackManager.getService().pushActivity(this);
 		initValues();
 		initViews();
@@ -109,5 +110,9 @@ public abstract class BaseActivity extends FragmentActivity {
 		super.onDestroy();
 		mBaseGsonService.cancel();
 		ActivityStackManager.getService().syncStackElement(this);
+	}
+
+	private String generateTag() {
+		return this.getClass().getSimpleName() + UUID.randomUUID().toString();
 	}
 }

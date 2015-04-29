@@ -17,11 +17,13 @@ import com.hr.aframe.volley.URLtoUTF8;
 public class BaseGsonService extends BaseService {
 	private static final String TAG = BaseGsonService.class.getSimpleName();
 	private Context mContext;
+	private Object mTag;
 
-	public BaseGsonService(Context context) {
+	public BaseGsonService(Context context, Object tag) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.mContext = context;
+		this.mTag = tag;
 	}
 
 	/**
@@ -73,9 +75,9 @@ public class BaseGsonService extends BaseService {
 		url = URLtoUTF8.toUtf8String(url).replaceAll(" ", "%20");
 		GsonRequest<T> request = new GsonRequest<T>(method, url, clazz,
 				listener, errorListener, params, headers);
-		// 请用缓存
-		// request.setShouldCache(true);
-		request.setTag(mContext);
+		// 不缓存
+		request.setShouldCache(false);
+		request.setTag(mTag);
 		// Setting Request Timeout
 		// request.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 1, 1.0f));
 		XLog.i(TAG, "request url : " + url);
@@ -85,6 +87,6 @@ public class BaseGsonService extends BaseService {
 	}
 
 	public void cancel() {
-		mRequestQueue.cancelAll(mContext);
+		mRequestQueue.cancelAll(mTag);
 	}
 }

@@ -11,7 +11,7 @@ public abstract class AbsListViewBaseActivity extends BaseActivity {
 	protected static final String STATE_PAUSE_ON_SCROLL = "STATE_PAUSE_ON_SCROLL";
 	protected static final String STATE_PAUSE_ON_FLING = "STATE_PAUSE_ON_FLING";
 
-	protected AbsListView mListView;
+	protected AbsListView mAbsListView;
 
 	protected boolean mPauseOnScroll = true;
 	protected boolean mPauseOnFling = true;
@@ -31,7 +31,7 @@ public abstract class AbsListViewBaseActivity extends BaseActivity {
 	}
 
 	private void applyScrollListener() {
-		mListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader
+		mAbsListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader
 				.getInstance(), mPauseOnScroll, mPauseOnFling));
 	}
 

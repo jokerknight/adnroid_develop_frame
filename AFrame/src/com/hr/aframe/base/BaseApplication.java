@@ -11,6 +11,7 @@ import android.content.SharedPreferences.Editor;
 import com.android.volley.RequestQueue;
 import com.hr.aframe.R;
 import com.hr.aframe.common.Config;
+import com.hr.aframe.util.CrashHandler;
 import com.hr.aframe.util.PropertiesUtils;
 import com.hr.aframe.util.StorageUtils;
 import com.hr.aframe.volley.RequestManager;
@@ -31,7 +32,9 @@ public class BaseApplication extends Application {
 		try {
 			initConfig();
 			initValues();
+			initVolleyQueue();
 			initImageLoader();
+			CrashHandler.getInstance().registerHandler(getApplicationContext());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -60,8 +63,6 @@ public class BaseApplication extends Application {
 	}
 
 	private void initValues() {
-		mRequestQueue = RequestManager
-				.initRequestQueue(getApplicationContext());
 		Config.DB_NAME = mSPferences.getString("DB.NAME", "default.db");
 		Config.DB_VEERSION = mSPferences.getInt("DB.VERSION", 1);
 		String[] db_tables = getResources().getStringArray(R.array.db_table);
@@ -69,6 +70,11 @@ public class BaseApplication extends Application {
 		for (String db_table : db_tables) {
 			Config.TABLES.add(db_table.getClass());
 		}
+	}
+
+	private void initVolleyQueue() {
+		mRequestQueue = RequestManager
+				.initRequestQueue(getApplicationContext());
 	}
 
 	private void initImageLoader() {
