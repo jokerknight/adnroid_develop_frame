@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -33,23 +35,21 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListe
  * 
  * 
  * 我们在使用该框架的时候尽量的使用displayImage()方法去加载图片，loadImage()
- * 是将图片对象回调到ImageLoadingListener接口的onLoadingComplete
- * ()方法中，需要我们手动去设置到ImageView上面，displayImage()方法中，对ImageView对象使用的是Weak
- * references，
+ * 是将图片对象回调到ImageLoadingListener接口的onLoadingComplete()方法中，
+ * 需要我们手动去设置到ImageView上面，displayImage()方法中，对ImageView对象使用的是Weakreferences，
  * 方便垃圾回收器回收ImageView对象，如果我们要加载固定大小的图片的时候，使用loadImage()方法需要传递一个ImageSize对象
  * ，而displayImage()方法会根据ImageView对象的测量值，或者android:layout_width and
- * android:layout_height设定的值，或者android:maxWidth and/or
- * android:maxHeight设定的值来裁剪图片
+ * android:layout_height设定的值，或者android:maxWidth and/or android:maxHeight设定的值来裁剪图片
  * */
 public class ImageLoaderUtils {
-	private static DisplayImageOptions mDisplayImageOptions;
+	private static DisplayImageOptions mDefaultDisplayOptions;
 
 	/**
 	 * 获取图片配置参数
 	 * **/
 	public static DisplayImageOptions getDefaultDisplayOptions() {
-		if (null == mDisplayImageOptions) {
-			mDisplayImageOptions = new DisplayImageOptions.Builder()
+		if (null == mDefaultDisplayOptions) {
+			mDefaultDisplayOptions = new DisplayImageOptions.Builder()
 					// .showImageOnFail(R.drawable.default_image)
 					// .showImageOnLoading(R.drawable.default_image)
 					.cacheInMemory(true).cacheOnDisk(true)
@@ -57,11 +57,14 @@ public class ImageLoaderUtils {
 					.bitmapConfig(Bitmap.Config.RGB_565)
 					.displayer(new FadeInBitmapDisplayer(20)).build();
 		}
-		return mDisplayImageOptions;
+		return mDefaultDisplayOptions;
 	}
 
 	public static void loadImage(String imageUri, int width, int height,
 			DisplayImageOptions displayOptions, View progressView) {
+		if (null == displayOptions) {
+			displayOptions = getDefaultDisplayOptions();
+		}
 		// result Bitmap will be fit to this size
 		ImageSize targetSize = new ImageSize(width, height);
 		ImageLoader.getInstance().loadImage(imageUri, targetSize,
@@ -97,23 +100,60 @@ public class ImageLoaderUtils {
 	}
 
 	public static void displayImage(String imageUri, ImageView imageView,
-			DisplayImageOptions displayOptions, View progressView) {
+			DisplayImageOptions displayOptions, final View progressView) {
+		imageView.setTag(imageUri);
+		if (null == displayOptions) {
+			displayOptions = getDefaultDisplayOptions();
+		}
 		ImageLoader.getInstance().displayImage(imageUri, imageView,
 				displayOptions, new ImageLoadingListener() {
 					@Override
 					public void onLoadingStarted(String imageUri, View view) {
+						if (null != progressView) {
+							progressView.setVisibility(View.VISIBLE);
+							if (progressView instanceof ProgressBar) {
+								ProgressBar progressBar = (ProgressBar) progressView;
+								progressBar.setProgress(0);
+							} else if (progressView instanceof TextView) {
+								TextView progressBar = (TextView) progressView;
+								progressBar.setText("0%");
+							}
+						}
 
 					}
 
 					@Override
 					public void onLoadingFailed(String imageUri, View view,
 							FailReason failReason) {
-
+						if (null != progressView) {
+							progressView.setVisibility(View.GONE);
+						}
+						String message = null;
+						switch (failReason.getType()) {
+						case IO_ERROR:
+							message = "Input/Output error";
+							break;
+						case DECODING_ERROR:
+							message = "Image can't be decoded";
+							break;
+						case NETWORK_DENIED:
+							message = "Downloads are denied";
+							break;
+						case OUT_OF_MEMORY:
+							message = "Out Of Memory error";
+							break;
+						case UNKNOWN:
+							message = "Unknown error";
+							break;
+						}
 					}
 
 					@Override
 					public void onLoadingComplete(String imageUri, View view,
 							Bitmap loadedImage) {
+						if (null != progressView) {
+							progressView.setVisibility(View.GONE);
+						}
 						if (!TextUtils.isEmpty(imageUri)) {
 							if (imageUri.equals(view.getTag())) {
 								if (view instanceof ImageView) {
@@ -126,12 +166,26 @@ public class ImageLoaderUtils {
 
 					@Override
 					public void onLoadingCancelled(String imageUri, View view) {
-
+						if (null != progressView) {
+							progressView.setVisibility(View.GONE);
+						}
 					}
 				}, new ImageLoadingProgressListener() {
 					@Override
 					public void onProgressUpdate(String imageUri, View view,
 							int current, int total) {
+						if (null != progressView) {
+							if (progressView instanceof ProgressBar) {
+								ProgressBar progressBar = (ProgressBar) progressView;
+								progressBar.setProgress(Math.round(100.0f
+										* current / total));
+							} else if (progressView instanceof TextView) {
+								TextView progressBar = (TextView) progressView;
+								progressBar.setText(Math.round(100.0f * current
+										/ total)
+										+ "%");
+							}
+						}
 
 					}
 				});

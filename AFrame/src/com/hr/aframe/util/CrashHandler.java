@@ -36,7 +36,7 @@ import android.widget.Toast;
  */
 public class CrashHandler implements UncaughtExceptionHandler {
 	/** Debug Log Tag */
-	public static final String TAG = CrashHandler.class.getSimpleName();
+	private static final String TAG = CrashHandler.class.getSimpleName();
 	/** 是否开启日志输出, 在Debug状态下开启, 在Release状态下关闭以提升程序性能 */
 	public static final boolean DEBUG = XLog.DEBUG_ENABLED;
 	/** CrashHandler实例 */
