@@ -130,8 +130,8 @@ public class DatabaseCacheHelper {
 			generateKey += "method=put";
 			break;
 		}
-		generateKey = generateKey + "&url=" + url + "&params="
-				+ mapformat(params) + "&headers=" + mapformat(headers);
+		generateKey = generateKey + "&url=" + url + "&params={"
+				+ mapformat(params) + "}&headers={" + mapformat(headers) + "}";
 		return generateKey;
 	}
 
