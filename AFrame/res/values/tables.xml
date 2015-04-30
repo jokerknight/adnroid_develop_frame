@@ -3,7 +3,7 @@
 
     <!-- item为实体类的类名 -->
     <string-array name="db_table">
-        <item>DatabaseCache</item>
+        <item>com.hr.aframe.volley.DatabaseCache</item>
     </string-array>
 
 </resources>

@@ -62,13 +62,15 @@ public class BaseApplication extends Application {
 		edit.commit();
 	}
 
-	private void initValues() {
+	private void initValues() throws ClassNotFoundException {
 		Config.DB_NAME = mSPferences.getString("DB.NAME", "default.db");
-		Config.DB_VEERSION = mSPferences.getInt("DB.VERSION", 1);
+		Config.DB_VEERSION = Integer.parseInt(mSPferences.getString(
+				"DB.VERSION", "1"));
 		String[] db_tables = getResources().getStringArray(R.array.db_table);
 		Config.TABLES = new ArrayList<Class>();
 		for (String db_table : db_tables) {
-			Config.TABLES.add(db_table.getClass());
+			System.out.println(Class.forName(db_table));
+			Config.TABLES.add(Class.forName(db_table));
 		}
 	}
 
