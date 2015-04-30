@@ -67,9 +67,8 @@ public class BaseApplication extends Application {
 		Config.DB_VEERSION = Integer.parseInt(mSPferences.getString(
 				"DB.VERSION", "1"));
 		String[] db_tables = getResources().getStringArray(R.array.db_table);
-		Config.TABLES = new ArrayList<Class>();
+		Config.TABLES = new ArrayList<Class<?>>();
 		for (String db_table : db_tables) {
-			System.out.println(Class.forName(db_table));
 			Config.TABLES.add(Class.forName(db_table));
 		}
 	}
@@ -89,7 +88,7 @@ public class BaseApplication extends Application {
 				.denyCacheImageMultipleSizesInMemory()
 				.tasksProcessingOrder(QueueProcessingType.FIFO)
 				// .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-				.discCache(new UnlimitedDiscCache(cacheDir))
+				.diskCache(new UnlimitedDiscCache(cacheDir))
 				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
 				.writeDebugLogs().build();
 		ImageLoader.getInstance().init(config);
