@@ -1,32 +1,33 @@
 package com.hr.aframe;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
+import android.os.Handler;
 import android.test.AndroidTestCase;
 
-import com.hr.aframe.bean.User;
+import com.android.volley.Request.Method;
+import com.hr.aframe.base.BaseGsonService;
+import com.hr.aframe.bean.TestBean;
 import com.hr.aframe.common.Config;
-import com.hr.aframe.dao.UserDao;
+import com.hr.aframe.volley.DatabaseCache;
 
 public class TestUnit extends AndroidTestCase {
+	private static final String url = "http://gc.ditu.aliyun.com/geocoding";
 
 	public void testProperties() {
-		Config.TABLES.add(User.class);
-		UserDao dao = new UserDao(mContext);
-		List<User> us = new ArrayList<User>();
-		us.add(new User());
-		us.add(new User());
-		us.add(new User());
-		us.add(new User());
-//		dao.save(us);
+		Config.TABLES.add(DatabaseCache.class);
 		try {
-			List<User> users = dao.queryAll();
-			System.out.println("count: " + users);
-		} catch (SQLException e) {
+			BaseGsonService mBaseGsonService = new BaseGsonService(mContext,
+					TestUnit.class.getSimpleName());
+			mBaseGsonService.addRequestToQueue(mHandelr, Method.GET, url, null,
+					null, TestBean.class, true);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	Handler mHandelr = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			System.out.println("handler:" + msg.obj);
+		};
+	};
 }

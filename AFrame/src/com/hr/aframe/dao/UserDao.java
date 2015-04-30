@@ -10,22 +10,22 @@ import com.hr.aframe.bean.User;
 import com.j256.ormlite.dao.Dao;
 
 public class UserDao extends BaseDao<User, Integer> {
-	private Context mContext;
+	private DatabaseHelper mDatabaseHelper;
 
-	public UserDao(Context mContext) {
+	public UserDao(Context context) {
 		// TODO Auto-generated constructor stub
-		this.mContext = mContext;
+		this.mDatabaseHelper = DatabaseHelper.getHelper(context);
 	}
 
 	@Override
 	public Dao<User, Integer> getDao() throws SQLException {
 		// TODO Auto-generated method stub
-		return DatabaseHelper.getHelper(mContext).getDao(User.class);
+		return mDatabaseHelper.getDao(User.class);
 	}
 
 	@Override
 	public DatabaseHelper getHelper() {
 		// TODO Auto-generated method stub
-		return DatabaseHelper.getHelper(mContext);
+		return mDatabaseHelper;
 	}
 }

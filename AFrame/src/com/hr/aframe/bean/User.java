@@ -3,12 +3,13 @@ package com.hr.aframe.bean;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "user")
+@DatabaseTable(tableName = "tb_user")
 public class User {
 	@DatabaseField(generatedId = true)
 	private int id;
 	@DatabaseField(columnName = "name")
 	private String name;
+
 
 	public int getId() {
 		return id;
@@ -25,10 +26,4 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + "]";
-	}
-
 }

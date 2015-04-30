@@ -1,20 +1,15 @@
 package com.hr.aframe.base;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 import com.hr.aframe.common.Config;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
-	private Map<String, Dao> daos = new HashMap<String, Dao>();
 	private static DatabaseHelper instance;
 
 	private DatabaseHelper(Context context, String databaseName,
@@ -70,36 +65,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		if (instance == null) {
 			synchronized (DatabaseHelper.class) {
 				if (instance == null)
-					instance = new DatabaseHelper(context.getApplicationContext());
+					instance = new DatabaseHelper(
+							context.getApplicationContext());
 			}
 		}
 		return instance;
 	}
 
-	public synchronized Dao getDao(Class clazz) {
-		Dao dao = null;
-		try {
-			String className = clazz.getSimpleName();
-			if (daos.containsKey(className)) {
-				dao = daos.get(className);
-			}
-			if (dao == null) {
-				dao = super.getDao(clazz);
-				daos.put(className, dao);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return dao;
-	}
-
 	@Override
 	public void close() {
 		super.close();
-		for (String key : daos.keySet()) {
-			Dao dao = daos.get(key);
-			dao = null;
-		}
 	}
 }

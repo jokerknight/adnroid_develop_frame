@@ -84,9 +84,9 @@ public abstract class BaseDao<T, PK> {
 		return dao.queryForAll();
 	}
 
-	public synchronized T queryById(String idName, String idValue)
+	public synchronized T queryByField(String name, String value)
 			throws SQLException {
-		List<T> lst = query(idName, idValue);
+		List<T> lst = query(name, value);
 		if (null != lst && !lst.isEmpty()) {
 			return lst.get(0);
 		} else {
@@ -120,9 +120,9 @@ public abstract class BaseDao<T, PK> {
 		return 0;
 	}
 
-	public synchronized int deleteById(String idName, String idValue)
+	public synchronized int deleteByField(String name, String value)
 			throws SQLException, InvalidParamsException {
-		T t = queryById(idName, idValue);
+		T t = queryByField(name, value);
 		if (null != t) {
 			return delete(t);
 		}
