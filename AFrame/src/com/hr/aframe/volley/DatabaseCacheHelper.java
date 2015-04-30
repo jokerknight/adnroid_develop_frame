@@ -18,6 +18,7 @@ public class DatabaseCacheHelper {
 	private DatabseCacheDao mDatabaseCacheDao;
 	private static DatabaseCacheHelper mHelper;
 	private final Gson mGson;
+	private long millis = Config.CACHE_TIME;
 
 	public synchronized static DatabaseCacheHelper getHelper(Context context) {
 		if (null == mHelper)
@@ -72,7 +73,7 @@ public class DatabaseCacheHelper {
 					PRIMARY_KEY, cacheIndex);
 			if (null != mDatabaseCache) {
 				long timestamp = mDatabaseCache.getTimestamp();
-				if (generateTimestamp() - timestamp >= Config.CACHE_TIME) {
+				if (generateTimestamp() - timestamp >= this.millis) {
 					this.mDatabaseCacheDao.delete(this.mDatabaseCacheDao.query(
 							PRIMARY_KEY, cacheIndex));
 				}
@@ -152,5 +153,9 @@ public class DatabaseCacheHelper {
 			buffer.deleteCharAt(buffer.length() - 1);
 		}
 		return buffer.toString();
+	}
+
+	public void setCacheMillis(long millis) {
+		this.millis = millis;
 	}
 }

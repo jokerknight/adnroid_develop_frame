@@ -58,7 +58,7 @@ public class TestActivity extends BaseActivity {
 		 * 数据请求和数据缓存测试
 		 * */
 		mBaseGsonService.addRequestToQueue(mHandler, Method.GET, url,
-				mRequestParams, mRequestHeaders, TestBean.class, true);
+				mRequestParams, mRequestHeaders, TestBean.class, true, 5);
 	}
 
 	@Override

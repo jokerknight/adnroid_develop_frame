@@ -30,13 +30,20 @@ public class BaseGsonService extends BaseService {
 
 	/**
 	 * @param useCache
-	 *            开启数据库缓存
+	 *            是否使用数据库缓存
+	 * @param minute
+	 *            缓存时间
 	 * */
 	public <T, PK> void addRequestToQueue(final Handler handler, int method,
 			String url, Map<String, String> params,
-			Map<String, String> headers, Class<T> clazz, final boolean useCache) {
+			Map<String, String> headers, Class<T> clazz,
+			final boolean useCache, final long minute) {
 		try {
-			if (useCache) {
+			if (useCache && minute > 0) {
+				// 设置缓存时间
+				long millis = minute * 60 * 1000;
+				DatabaseCacheHelper.getHelper(mContext).setCacheMillis(millis);
+
 				index = DatabaseCacheHelper.getHelper(mContext)
 						.generateCacheIndex(method, url, params, headers);
 				boolean hasCache = DatabaseCacheHelper.getHelper(mContext)
@@ -60,7 +67,7 @@ public class BaseGsonService extends BaseService {
 				public void onResponse(T response) {
 					// TODO Auto-generated method stub
 					XLog.i(TAG, "response result : " + response);
-					if (useCache) {
+					if (useCache && minute > 0) {
 						DatabaseCacheHelper.getHelper(mContext).cacheDatas(
 								response, index);
 						XLog.i(TAG, "<-------------------> cache data");
