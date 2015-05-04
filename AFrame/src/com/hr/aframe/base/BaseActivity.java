@@ -44,8 +44,8 @@ public abstract class BaseActivity extends FragmentActivity {
 		mBaseGsonService = new BaseGsonService(this, generateTag());
 		ActivityStackManager.getService().pushActivity(this);
 		initValues();
-		initViews();
 		autoInjectAllField();
+		initViews();
 		initDatas();
 		initViewEventListener();
 	}

@@ -37,18 +37,20 @@ public final class R {
         public static final int decode=0x7f060000;
         public static final int decode_failed=0x7f060001;
         public static final int decode_succeeded=0x7f060002;
-        public static final int list=0x7f060011;
+        public static final int list=0x7f060012;
+        public static final int loppervper=0x7f06000e;
         public static final int quit=0x7f060003;
         public static final int restart_preview=0x7f060004;
-        public static final int result_image=0x7f06000e;
-        public static final int result_text=0x7f06000f;
+        public static final int result_image=0x7f06000f;
+        public static final int result_text=0x7f060010;
         public static final int return_scan_result=0x7f060005;
-        public static final int test=0x7f060010;
+        public static final int test=0x7f060011;
     }
     public static final class layout {
         public static final int activity_capture=0x7f030000;
-        public static final int activity_result=0x7f030001;
-        public static final int test=0x7f030002;
+        public static final int activity_lopper=0x7f030001;
+        public static final int activity_result=0x7f030002;
+        public static final int test=0x7f030003;
     }
     public static final class raw {
         public static final int beep=0x7f050000;
