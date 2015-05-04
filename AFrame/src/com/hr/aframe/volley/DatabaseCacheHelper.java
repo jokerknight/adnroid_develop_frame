@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.hr.aframe.base.BaseDao;
 import com.hr.aframe.base.DatabaseHelper;
 import com.hr.aframe.common.Config;
+import com.hr.aframe.util.Tools;
 import com.j256.ormlite.dao.Dao;
 
 public class DatabaseCacheHelper {
@@ -19,6 +20,7 @@ public class DatabaseCacheHelper {
 	private static DatabaseCacheHelper mHelper;
 	private final Gson mGson;
 	private long millis = Config.CACHE_TIME;
+	private Context mContext;
 
 	public synchronized static DatabaseCacheHelper getHelper(Context context) {
 		if (null == mHelper)
@@ -30,6 +32,7 @@ public class DatabaseCacheHelper {
 		this.mDatabaseHelper = DatabaseHelper.getHelper(context);
 		this.mDatabaseCacheDao = new DatabseCacheDao();
 		this.mGson = new Gson();
+		this.mContext = context.getApplicationContext();
 	}
 
 	protected class DatabseCacheDao extends BaseDao<DatabaseCache, String> {
@@ -69,6 +72,9 @@ public class DatabaseCacheHelper {
 	 * */
 	public void verify(String cacheIndex) {
 		try {
+			/*如果网络不通，不进行数据校验*/
+			if (!Tools.isNetworkAvailable(mContext))
+				return;
 			DatabaseCache mDatabaseCache = this.mDatabaseCacheDao.queryByField(
 					PRIMARY_KEY, cacheIndex);
 			if (null != mDatabaseCache) {
