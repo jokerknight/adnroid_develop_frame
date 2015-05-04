@@ -30,8 +30,8 @@ public abstract class AbBaseFragment extends Fragment {
 			mFragmentView = inflater
 					.inflate(getLayoutResID(), container, false);
 			initValues();
-			initViews();
 			autoInjectAllField();
+			initViews();
 			initDatas();
 			initViewEventListener();
 		}
