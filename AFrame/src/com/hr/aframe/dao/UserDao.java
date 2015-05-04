@@ -4,12 +4,12 @@ import java.sql.SQLException;
 
 import android.content.Context;
 
-import com.hr.aframe.base.BaseDao;
+import com.hr.aframe.base.AbBaseDao;
 import com.hr.aframe.base.DatabaseHelper;
 import com.hr.aframe.bean.User;
 import com.j256.ormlite.dao.Dao;
 
-public class UserDao extends BaseDao<User, Integer> {
+public class UserDao extends AbBaseDao<User, Integer> {
 	private DatabaseHelper mDatabaseHelper;
 
 	public UserDao(Context context) {

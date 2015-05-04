@@ -17,7 +17,7 @@ import android.view.ViewGroup;
  * ViewPager cycle
  * */
 @SuppressLint("HandlerLeak")
-public abstract class BaseCyclePagerAdapter<T> extends PagerAdapter {
+public abstract class AbBaseCyclePagerAdapter<T> extends PagerAdapter {
 
 	protected abstract List<View> getViewList(List<T> lst);
 
@@ -33,7 +33,7 @@ public abstract class BaseCyclePagerAdapter<T> extends PagerAdapter {
 	private int mCurrentPagePosition;
 	private int dotsSize;
 
-	public BaseCyclePagerAdapter(ViewPager vp, List<T> lst) {
+	public AbBaseCyclePagerAdapter(ViewPager vp, List<T> lst) {
 		this.mList = lst;
 		this.mViewPager = vp;
 		this.mViewPager.setOnPageChangeListener(mOnPageChangeListener);

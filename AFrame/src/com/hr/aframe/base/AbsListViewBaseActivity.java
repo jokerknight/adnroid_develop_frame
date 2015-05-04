@@ -6,7 +6,7 @@ import android.widget.AbsListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
-public abstract class AbsListViewBaseActivity extends BaseActivity {
+public abstract class AbsListViewBaseActivity extends AbBaseFragmentActivity {
 
 	protected static final String STATE_PAUSE_ON_SCROLL = "STATE_PAUSE_ON_SCROLL";
 	protected static final String STATE_PAUSE_ON_FLING = "STATE_PAUSE_ON_FLING";

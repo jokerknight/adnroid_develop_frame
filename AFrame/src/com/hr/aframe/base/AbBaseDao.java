@@ -14,7 +14,7 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
-public abstract class BaseDao<T, PK> {
+public abstract class AbBaseDao<T, PK> {
 	public abstract Dao<T, PK> getDao() throws SQLException;
 
 	public abstract DatabaseHelper getHelper();

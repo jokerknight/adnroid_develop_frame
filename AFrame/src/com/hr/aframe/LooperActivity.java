@@ -7,14 +7,14 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.hr.aframe.base.BaseActivity;
-import com.hr.aframe.base.BaseCyclePagerAdapter;
+import com.hr.aframe.base.AbBaseFragmentActivity;
+import com.hr.aframe.base.AbBaseCyclePagerAdapter;
 import com.hr.aframe.base.ViewInject;
 import com.hr.aframe.bean.ImageBean;
 import com.hr.aframe.util.ImageLoaderUtils;
 import com.hr.aframe.util.XLog;
 
-public class LooperActivity extends BaseActivity {
+public class LooperActivity extends AbBaseFragmentActivity {
 	private static final String TAG = LooperActivity.class.getSimpleName();
 	@ViewInject(R.id.loppervper)
 	private ViewPager mViewPager;
@@ -34,7 +34,7 @@ public class LooperActivity extends BaseActivity {
 		mCyclePagerAdapter.startCycle();
 	}
 
-	class CyclePagerAdapter extends BaseCyclePagerAdapter<ImageBean> {
+	class CyclePagerAdapter extends AbBaseCyclePagerAdapter<ImageBean> {
 
 		public CyclePagerAdapter(ViewPager vp, List<ImageBean> lst) {
 			super(vp, lst);

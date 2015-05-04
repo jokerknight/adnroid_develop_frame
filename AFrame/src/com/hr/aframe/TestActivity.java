@@ -10,11 +10,11 @@ import android.widget.ListView;
 
 import com.android.volley.Request.Method;
 import com.hr.aframe.adapter.TestAdapter;
-import com.hr.aframe.base.BaseActivity;
+import com.hr.aframe.base.AbBaseFragmentActivity;
 import com.hr.aframe.base.ViewInject;
 import com.hr.aframe.bean.TestBean;
 
-public class TestActivity extends BaseActivity {
+public class TestActivity extends AbBaseFragmentActivity {
 	private static final String url = "http://gc.ditu.aliyun.com/geocoding";
 	@ViewInject(R.id.test)
 	private ViewGroup mTestGroup;

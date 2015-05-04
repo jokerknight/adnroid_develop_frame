@@ -7,7 +7,7 @@ import android.content.Context;
 
 import com.android.volley.Request.Method;
 import com.google.gson.Gson;
-import com.hr.aframe.base.BaseDao;
+import com.hr.aframe.base.AbBaseDao;
 import com.hr.aframe.base.DatabaseHelper;
 import com.hr.aframe.common.Config;
 import com.hr.aframe.util.Tools;
@@ -35,7 +35,7 @@ public class DatabaseCacheHelper {
 		this.mContext = context.getApplicationContext();
 	}
 
-	protected class DatabseCacheDao extends BaseDao<DatabaseCache, String> {
+	protected class DatabseCacheDao extends AbBaseDao<DatabaseCache, String> {
 
 		@Override
 		public Dao<DatabaseCache, String> getDao() throws SQLException {

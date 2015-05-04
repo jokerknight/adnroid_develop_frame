@@ -11,7 +11,7 @@ import android.view.Window;
 import com.hr.aframe.R;
 import com.hr.aframe.util.ActivityStackManager;
 
-public abstract class BaseActivity extends FragmentActivity {
+public abstract class AbBaseFragmentActivity extends FragmentActivity {
 	protected Context mContext;
 	protected BaseGsonService mBaseGsonService;
 
