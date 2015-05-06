@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.support.multidex.MultiDex;
 
 import com.android.volley.RequestQueue;
 import com.hr.aframe.R;
@@ -94,4 +96,10 @@ public class BaseApplication extends Application {
 		ImageLoader.getInstance().init(config);
 	}
 
+	@Override
+	protected void attachBaseContext(Context base) {
+		// TODO Auto-generated method stub
+		super.attachBaseContext(base);
+		MultiDex.install(this);
+	}
 }

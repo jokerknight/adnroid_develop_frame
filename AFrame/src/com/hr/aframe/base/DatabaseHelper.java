@@ -50,6 +50,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		}
 	}
 
+	/**
+	 * 数据库降级操作
+	 * */
 	@Override
 	public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
