@@ -3,7 +3,6 @@ package com.hr.aframe.view.pulltorefresh;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,8 +52,7 @@ public class PullToRefreshLayout extends ViewGroup {
 	private boolean isFirstOnLayout = true;
 	private boolean isTouch;
 
-	private GestureDetector mGestureDetector;
-	private float mDownX, mDownY;
+	private float mLastX;
 
 	private OnRefreshListener mOnRefreshListener;
 
@@ -90,8 +88,6 @@ public class PullToRefreshLayout extends ViewGroup {
 		if (getChildCount() != 3) {
 			// 抛出异常
 		}
-		mGestureDetector = new GestureDetector(getContext(),
-				new YScrollDetector());
 	}
 
 	@Override
@@ -102,12 +98,9 @@ public class PullToRefreshLayout extends ViewGroup {
 			mEvents = 0;
 			isTouch = true;
 			mLastY = ev.getY();
-			mDownY = ev.getY();
-			mDownX = ev.getX();
+			mLastX = ev.getX();
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
-			mDownY = ev.getY();
-			mDownX = ev.getX();
 		case MotionEvent.ACTION_POINTER_UP:
 			// 过滤多点触碰
 			mEvents = -1;
@@ -145,14 +138,22 @@ public class PullToRefreshLayout extends ViewGroup {
 				} else {
 					mPullY = 0;
 				}
-			} else
+			} else {
 				mEvents = 0;
-			mLastY = ev.getY();
+				mLastX = ev.getX();
+			}
+			
 			if (Math.abs(mPullY) > 0) {
 				// 防止下拉过程中误触发长按事件
 				ev.setAction(MotionEvent.ACTION_CANCEL);
+				// 防止viewpager水平滑动时，触发下拉刷新
+				if (Math.abs(ev.getX() - mLastX) > Math.abs(mPullY)) {
+					mPullY = 0;
+				}
 				requestLayout();
 			}
+			mLastY = ev.getY();
+			mLastX = ev.getX();
 			break;
 		case MotionEvent.ACTION_UP:
 			isTouch = false;

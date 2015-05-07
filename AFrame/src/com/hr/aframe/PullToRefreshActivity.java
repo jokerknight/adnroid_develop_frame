@@ -35,7 +35,6 @@ public class PullToRefreshActivity extends AbBaseFragmentActivity {
 	@Override
 	protected void initValues() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
