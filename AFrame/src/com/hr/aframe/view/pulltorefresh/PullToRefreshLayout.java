@@ -162,7 +162,7 @@ public class PullToRefreshLayout extends ViewGroup {
 				ev.setAction(MotionEvent.ACTION_CANCEL);
 			}
 			if (mPullY > 0) {
-				if (mPullY > mRefreshDist) {
+				if (mPullY >= mRefreshDist) {
 					mPullY = mRefreshDist;
 					if (mCurrentState != REFRESHING) {
 						changeState(REFRESHING);
@@ -177,7 +177,7 @@ public class PullToRefreshLayout extends ViewGroup {
 				}
 				requestLayout();
 			} else if (mPullY < 0) {
-				if (Math.abs(mPullY) > mLoadmoreDist) {
+				if (Math.abs(mPullY) >= mLoadmoreDist) {
 					mPullY = -mLoadmoreDist;
 					if (mCurrentState != LOADING) {
 						changeState(LOADING);
@@ -211,7 +211,7 @@ public class PullToRefreshLayout extends ViewGroup {
 			((TextView) ((ViewGroup) mRefreshView).getChildAt(0))
 					.setText("PULL_TO_REFRESH");
 			((TextView) ((ViewGroup) mLoadmoreView).getChildAt(0))
-					.setText("PULL_TO_REFRESH");
+					.setText("PULL_TO_LOAD");
 			break;
 		case RELEASE_TO_REFRESH:
 			// XLog.e(TAG, "RELEASE_TO_REFRESH");
@@ -240,11 +240,11 @@ public class PullToRefreshLayout extends ViewGroup {
 		switch (result) {
 		case SUCCEED:
 			((TextView) ((ViewGroup) mRefreshView).getChildAt(0))
-					.setText("refreshing success");
+					.setText("REFRESHING SUCCESS");
 			break;
 		case FAIL:
 			((TextView) ((ViewGroup) mRefreshView).getChildAt(0))
-					.setText("refreshing fail");
+					.setText("REFRESHING FAIL");
 			break;
 		}
 		mHandler.sendMessageDelayed(mHandler.obtainMessage(), delayMillis);
@@ -254,11 +254,11 @@ public class PullToRefreshLayout extends ViewGroup {
 		switch (result) {
 		case SUCCEED:
 			((TextView) ((ViewGroup) mLoadmoreView).getChildAt(0))
-					.setText("lodding success");
+					.setText("LOADDING SUCCESS");
 			break;
 		case FAIL:
 			((TextView) ((ViewGroup) mLoadmoreView).getChildAt(0))
-					.setText("lodding fail");
+					.setText("LOADDING FAIL");
 			break;
 		}
 		mHandler.sendMessageDelayed(mHandler.obtainMessage(), delayMillis);
