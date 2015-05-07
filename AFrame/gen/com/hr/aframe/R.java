@@ -18,6 +18,19 @@ public final class R {
         public static final int db_table=0x7f090000;
     }
     public static final class attr {
+        /** <p>Must be one or more (separated by '|') of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>top</code></td><td>1</td><td> pull down </td></tr>
+<tr><td><code>bottom</code></td><td>-1</td><td> pull up </td></tr>
+<tr><td><code>both</code></td><td>0</td><td> both </td></tr>
+<tr><td><code>none</code></td><td>2</td><td> none </td></tr>
+</table>
+         */
+        public static final int PullMode=0x7f010000;
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
@@ -26,27 +39,31 @@ public final class R {
         public static final int shadow=0x7f020003;
     }
     public static final class id {
-        public static final int capture_container=0x7f060007;
-        public static final int capture_crop_view=0x7f060009;
-        public static final int capture_mask_bottom=0x7f06000b;
-        public static final int capture_mask_left=0x7f06000c;
-        public static final int capture_mask_right=0x7f06000d;
-        public static final int capture_mask_top=0x7f060008;
-        public static final int capture_preview=0x7f060006;
-        public static final int capture_scan_line=0x7f06000a;
+        public static final int both=0x7f060006;
+        public static final int bottom=0x7f060007;
+        public static final int capture_container=0x7f06000b;
+        public static final int capture_crop_view=0x7f06000d;
+        public static final int capture_mask_bottom=0x7f06000f;
+        public static final int capture_mask_left=0x7f060010;
+        public static final int capture_mask_right=0x7f060011;
+        public static final int capture_mask_top=0x7f06000c;
+        public static final int capture_preview=0x7f06000a;
+        public static final int capture_scan_line=0x7f06000e;
         public static final int decode=0x7f060000;
         public static final int decode_failed=0x7f060001;
         public static final int decode_succeeded=0x7f060002;
-        public static final int list=0x7f060014;
-        public static final int loppervper=0x7f06000e;
-        public static final int pullableview=0x7f060010;
-        public static final int pulltorefresh=0x7f06000f;
+        public static final int list=0x7f060018;
+        public static final int loppervper=0x7f060012;
+        public static final int none=0x7f060008;
+        public static final int pullableview=0x7f060014;
+        public static final int pulltorefresh=0x7f060013;
         public static final int quit=0x7f060003;
         public static final int restart_preview=0x7f060004;
-        public static final int result_image=0x7f060011;
-        public static final int result_text=0x7f060012;
+        public static final int result_image=0x7f060015;
+        public static final int result_text=0x7f060016;
         public static final int return_scan_result=0x7f060005;
-        public static final int test=0x7f060013;
+        public static final int test=0x7f060017;
+        public static final int top=0x7f060009;
     }
     public static final class layout {
         public static final int activity_capture=0x7f030000;
@@ -65,4 +82,38 @@ public final class R {
     public static final class style {
         public static final int AppTheme=0x7f080000;
     }
+    public static final class styleable {
+        /**  pulltorefresh 
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #IPullable_PullMode com.hr.aframe:PullMode}</code></td><td></td></tr>
+           </table>
+           @see #IPullable_PullMode
+         */
+        public static final int[] IPullable = {
+            0x7f010000
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.hr.aframe.R.attr#PullMode}
+          attribute's value can be found in the {@link #IPullable} array.
+
+
+          <p>Must be one or more (separated by '|') of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>top</code></td><td>1</td><td> pull down </td></tr>
+<tr><td><code>bottom</code></td><td>-1</td><td> pull up </td></tr>
+<tr><td><code>both</code></td><td>0</td><td> both </td></tr>
+<tr><td><code>none</code></td><td>2</td><td> none </td></tr>
+</table>
+          @attr name com.hr.aframe:PullMode
+        */
+        public static final int IPullable_PullMode = 0;
+    };
 }

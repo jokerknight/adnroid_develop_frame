@@ -47,12 +47,11 @@ public class PullToRefreshLayout extends ViewGroup {
 
 	private float mPullY;
 	private float mLastY;
+	private float mLastX;
 	private float mRadio = 2;
 	private int mEvents;
 	private boolean isFirstOnLayout = true;
 	private boolean isTouch;
-
-	private float mLastX;
 
 	private OnRefreshListener mOnRefreshListener;
 
@@ -108,6 +107,7 @@ public class PullToRefreshLayout extends ViewGroup {
 		case MotionEvent.ACTION_MOVE:
 			if (mEvents == 0) {
 				mPullY = mPullY + (ev.getY() - mLastY) / mRadio;
+				XLog.e(TAG, "PullY:" + mPullY);
 				// pull down
 				if (((IPullable) mPullableView).canPullDown() && mPullY > 0
 						&& mCurrentState != LOADING) {
@@ -142,7 +142,7 @@ public class PullToRefreshLayout extends ViewGroup {
 				mEvents = 0;
 				mLastX = ev.getX();
 			}
-			
+
 			if (Math.abs(mPullY) > 0) {
 				// 防止下拉过程中误触发长按事件
 				ev.setAction(MotionEvent.ACTION_CANCEL);

@@ -20,10 +20,12 @@
     </LinearLayout>
 
     <com.hr.aframe.view.pulltorefresh.view.PullableListView
+        xmlns:pullable="http://schemas.android.com/apk/res/com.hr.aframe"
         android:id="@+id/pullableview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:cacheColorHint="#00000000" >
+        android:cacheColorHint="#00000000"
+        pullable:PullMode="both" >
     </com.hr.aframe.view.pulltorefresh.view.PullableListView>
 
     <LinearLayout

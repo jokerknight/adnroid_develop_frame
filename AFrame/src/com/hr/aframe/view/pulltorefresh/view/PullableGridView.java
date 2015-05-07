@@ -1,26 +1,26 @@
 package com.hr.aframe.view.pulltorefresh.view;
 
+import com.hr.aframe.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.widget.ListView;
+import android.widget.GridView;
 
-import com.hr.aframe.R;
-
-public class PullableListView extends ListView implements IPullable {
+public class PullableGridView extends GridView implements IPullable {
 	private boolean mCanPullDown = true;
 	private boolean mCanPullUp = true;
 
-	public PullableListView(Context context) {
+	public PullableGridView(Context context) {
 		super(context);
 	}
 
-	public PullableListView(Context context, AttributeSet attrs) {
+	public PullableGridView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context, attrs);
 	}
 
-	public PullableListView(Context context, AttributeSet attrs, int defStyle) {
+	public PullableGridView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context, attrs);
 	}
@@ -58,13 +58,12 @@ public class PullableListView extends ListView implements IPullable {
 		if (getCount() == 0) {
 			// 没有item的时候也可以下拉刷新
 			return true;
-		} else if (getFirstVisiblePosition() == 0 && null != getChildAt(0)
-				&& getChildAt(0).getTop() >= 0) {
-			// Top position of this view relative to its parent.
-			// 滑到ListView的顶部了
-			return true;
-		} else
-			return false;
+		} else if (getFirstVisiblePosition() == 0) {
+			if (null != getChildAt(0) && getChildAt(0).getTop() >= 0)
+				// 滑到顶部了
+				return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -75,15 +74,14 @@ public class PullableListView extends ListView implements IPullable {
 		if (getCount() == 0) {
 			// 没有item的时候也可以上拉加载
 			return true;
-		} else if (getLastVisiblePosition() == (getCount() - 1)
-				&& null != getChildAt(getLastVisiblePosition()
-						- getFirstVisiblePosition())
-				&& getChildAt(
-						getLastVisiblePosition() - getFirstVisiblePosition())
-						.getBottom() <= getMeasuredHeight()) {
+		} else if (getLastVisiblePosition() == (getCount() - 1)) {
 			// 滑到底部了
-			// Bottom position of this view relative to its parent.
-			return true;
+			if (null != getChildAt(getLastVisiblePosition()
+					- getFirstVisiblePosition())
+					&& getChildAt(
+							getLastVisiblePosition()
+									- getFirstVisiblePosition()).getBottom() <= getMeasuredHeight())
+				return true;
 		}
 		return false;
 	}
