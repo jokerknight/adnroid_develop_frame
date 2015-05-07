@@ -38,6 +38,8 @@ public class PullToRefreshLayout extends ViewGroup {
 	public static final int LOADING = 4;
 	// done
 	public static final int DONE = 5;
+	// 已经没有更多数据了
+	public static final int LOAD_OVER = 6;
 	// 当前状态
 	private int mCurrentState = INIT;
 	// 刷新成功
@@ -107,7 +109,7 @@ public class PullToRefreshLayout extends ViewGroup {
 		case MotionEvent.ACTION_MOVE:
 			if (mEvents == 0) {
 				mPullY = mPullY + (ev.getY() - mLastY) / mRadio;
-				XLog.e(TAG, "PullY:" + mPullY);
+				XLog.e(TAG, "MOVE PullY:" + mPullY);
 				// pull down
 				if (((IPullable) mPullableView).canPullDown() && mPullY > 0
 						&& mCurrentState != LOADING) {
@@ -125,15 +127,19 @@ public class PullToRefreshLayout extends ViewGroup {
 				// pull up
 				else if (((IPullable) mPullableView).canPullUp() && mPullY < 0
 						&& mCurrentState != REFRESHING) {
-					if (Math.abs(mPullY) > mLoadmoreDist) {
-						if (mCurrentState != LOADING) {
-							changeState(RELEASE_TO_LOAD);
-						}
+					if (mCurrentState != LOAD_OVER) {
+						// original version start
+						if (Math.abs(mPullY) > mLoadmoreDist) {
+							if (mCurrentState != LOADING) {
+								changeState(RELEASE_TO_LOAD);
+							}
 
-					} else {
-						if (mCurrentState != LOADING) {
-							changeState(INIT);
+						} else {
+							if (mCurrentState != LOADING) {
+								changeState(INIT);
+							}
 						}
+						// original version end
 					}
 				} else {
 					mPullY = 0;
@@ -146,16 +152,18 @@ public class PullToRefreshLayout extends ViewGroup {
 			if (Math.abs(mPullY) > 0) {
 				// 防止下拉过程中误触发长按事件
 				ev.setAction(MotionEvent.ACTION_CANCEL);
-				// 防止水平滑动中触发下拉刷新
+				// 防止水平滑动中触发刷新事件
 				if (Math.abs(ev.getX() - mLastX) > Math.abs(mPullY)) {
 					mPullY = 0;
 				}
+				XLog.e(TAG, "MOVE Layout PullY:" + mPullY);
 				requestLayout();
 			}
 			mLastY = ev.getY();
 			mLastX = ev.getX();
 			break;
 		case MotionEvent.ACTION_UP:
+			XLog.e(TAG, "UP PullY:" + mPullY);
 			isTouch = false;
 			// 防止下拉过程中误触发点击事件
 			if (Math.abs(mPullY) > 0) {
@@ -177,20 +185,27 @@ public class PullToRefreshLayout extends ViewGroup {
 				}
 				requestLayout();
 			} else if (mPullY < 0) {
-				if (Math.abs(mPullY) >= mLoadmoreDist) {
-					mPullY = -mLoadmoreDist;
-					if (mCurrentState != LOADING) {
-						changeState(LOADING);
-						if (null != this.mOnRefreshListener) {
-							this.mOnRefreshListener.onLoadding(this);
+				if (mCurrentState != LOAD_OVER) {
+					// original version start
+					if (Math.abs(mPullY) >= mLoadmoreDist) {
+						mPullY = -mLoadmoreDist;
+						if (mCurrentState != LOADING) {
+							changeState(LOADING);
+							if (null != this.mOnRefreshListener) {
+								this.mOnRefreshListener.onLoadding(this);
+							}
 						}
+					} else {
+						mPullY = 0;
+						if (mCurrentState != LOADING)
+							changeState(INIT);
 					}
+					requestLayout();
+					// original version end
 				} else {
 					mPullY = 0;
-					if (mCurrentState != LOADING)
-						changeState(INIT);
+					requestLayout();
 				}
-				requestLayout();
 			}
 			break;
 		default:
@@ -233,6 +248,10 @@ public class PullToRefreshLayout extends ViewGroup {
 			((TextView) ((ViewGroup) mLoadmoreView).getChildAt(0))
 					.setText("LOADING");
 			break;
+		case LOAD_OVER:// 上拉加载，没有更多时显示
+			((TextView) ((ViewGroup) mLoadmoreView).getChildAt(0))
+					.setText("NO MORE");
+			break;
 		}
 	}
 
@@ -247,10 +266,17 @@ public class PullToRefreshLayout extends ViewGroup {
 					.setText("REFRESHING FAIL");
 			break;
 		}
-		mHandler.sendMessageDelayed(mHandler.obtainMessage(), delayMillis);
+		mHandler.sendMessageDelayed(mHandler.obtainMessage(0, null),
+				delayMillis);
 	}
 
-	public void loadFinihsed(int result) {
+	/**
+	 * @param result
+	 * @param isOver
+	 *            true: There isn't any more .
+	 * 
+	 * */
+	public void loadFinihsed(int result, boolean isOver) {
 		switch (result) {
 		case SUCCEED:
 			((TextView) ((ViewGroup) mLoadmoreView).getChildAt(0))
@@ -261,15 +287,19 @@ public class PullToRefreshLayout extends ViewGroup {
 					.setText("LOADDING FAIL");
 			break;
 		}
-		mHandler.sendMessageDelayed(mHandler.obtainMessage(), delayMillis);
+		mHandler.sendMessageDelayed(mHandler.obtainMessage(0, isOver),
+				delayMillis);
 	}
 
-	Handler mHandler = new Handler() {
+	protected Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			changeState(INIT);
 			if (mPullY != 0) {
 				mPullY = 0;
 				requestLayout();
+			}
+			if (null != msg.obj && (boolean) msg.obj) {
+				changeState(LOAD_OVER);
 			}
 		};
 	};

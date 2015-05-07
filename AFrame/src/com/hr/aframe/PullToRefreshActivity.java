@@ -14,11 +14,13 @@ import com.hr.aframe.view.pulltorefresh.PullToRefreshLayout.OnRefreshListener;
 import com.hr.aframe.view.pulltorefresh.view.PullableListView;
 
 public class PullToRefreshActivity extends AbBaseFragmentActivity {
-	private static final String TAG = PullToRefreshActivity.class.getSimpleName();
+	private static final String TAG = PullToRefreshActivity.class
+			.getSimpleName();
 	@ViewInject(R.id.pullableview)
 	private PullableListView mPullableView;
 	@ViewInject(R.id.pulltorefresh)
 	private PullToRefreshLayout mPullToRefreshLayout;
+	private int loadtime;
 
 	@Override
 	protected int getLayoutResID() {
@@ -53,11 +55,13 @@ public class PullToRefreshActivity extends AbBaseFragmentActivity {
 				// TODO Auto-generated method stub
 				XLog.e(TAG, "刷新.....");
 				mHandler.sendMessageDelayed(mHandler.obtainMessage(0), 1000);
+				loadtime = 0;
 			}
 
 			@Override
 			public void onLoadding(PullToRefreshLayout pullToRefreshLayout) {
 				// TODO Auto-generated method stub
+				loadtime++;
 				mHandler.sendMessageDelayed(mHandler.obtainMessage(1), 1000);
 				XLog.e(TAG, "加载.....");
 			}
@@ -72,7 +76,13 @@ public class PullToRefreshActivity extends AbBaseFragmentActivity {
 						.refreshFinished(PullToRefreshLayout.SUCCEED);
 				break;
 			case 1:
-				mPullToRefreshLayout.loadFinihsed(PullToRefreshLayout.SUCCEED);
+				if (loadtime < 2) {
+					mPullToRefreshLayout.loadFinihsed(
+							PullToRefreshLayout.SUCCEED, false);
+				} else {
+					mPullToRefreshLayout.loadFinihsed(
+							PullToRefreshLayout.SUCCEED, true);
+				}
 				break;
 			}
 
