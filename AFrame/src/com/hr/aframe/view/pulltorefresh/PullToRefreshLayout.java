@@ -146,7 +146,7 @@ public class PullToRefreshLayout extends ViewGroup {
 			if (Math.abs(mPullY) > 0) {
 				// 防止下拉过程中误触发长按事件
 				ev.setAction(MotionEvent.ACTION_CANCEL);
-				// 防止水平滑动触发下拉刷新
+				// 防止水平滑动中触发下拉刷新
 				if (Math.abs(ev.getX() - mLastX) > Math.abs(mPullY)) {
 					mPullY = 0;
 				}
