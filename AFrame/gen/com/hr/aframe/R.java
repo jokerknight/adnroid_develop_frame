@@ -1478,6 +1478,7 @@ containing a value of this type.
     }
     public static final class style {
         public static final int AppTheme=0x7f080000;
+        public static final int Dialog_Theme=0x7f080001;
     }
     public static final class styleable {
         /** Attributes that can be used with a AbsListView.
