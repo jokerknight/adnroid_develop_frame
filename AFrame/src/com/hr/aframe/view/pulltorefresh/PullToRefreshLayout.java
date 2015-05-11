@@ -193,9 +193,6 @@ public class PullToRefreshLayout extends ViewGroup {
 				}
 				requestLayout();
 			} else if (mPullY < 0) {
-				if (isLoadOver) {
-					changeState(LOAD_OVER);
-				}
 				if (mCurrentState != LOAD_OVER) {
 					// 如果正在加载中，触摸屏幕不想加载脚被关掉，使用Math.abs(mPullY) >= mRefreshDist
 					// original version start
