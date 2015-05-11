@@ -2,6 +2,8 @@ package com.hr.aframe.base;
 
 import java.lang.reflect.Field;
 
+import com.umeng.analytics.MobclickAgent;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public abstract class AbBaseFragment extends Fragment {
-	private View mFragmentView;
+	protected static String TAG;
+	protected View mFragmentView;
 
 	protected abstract int getLayoutResID();
 
@@ -26,6 +29,7 @@ public abstract class AbBaseFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		TAG = this.getClass().getSimpleName();
 		if (null == mFragmentView) {
 			mFragmentView = inflater
 					.inflate(getLayoutResID(), container, false);
@@ -69,5 +73,18 @@ public abstract class AbBaseFragment extends Fragment {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPageEnd(TAG);
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		MobclickAgent.onPageStart(TAG);
 	}
 }

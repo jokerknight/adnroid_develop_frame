@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 项目名称 -->
+<project name="xxxx" default="deploy" >
+    <!-- 指定环境变量参数为:SystemVariable-->
+    <property environment="SystemVariable" />
+    <!-- 将ant安装目录指向环境变量ANT_HOME指向的路径， 如果未配置这个环境变量 请将其值修改为绝对路径-->
+    <property name="ant.home" value="${SystemVariable.ANT_HOME}" />
+    <!-- 将SDK安装目录指向环境变量ANDROID_SDK_HOME指向的路径， 如果未配置这个环境变量 请将其值修改为绝对路径 -->
+    <property name="sdk.dir" value="${SystemVariable.ANDROID_HOME}" />
+
+
+    <property file="ant.properties" />
+
+    <loadproperties srcFile="project.properties" />
+
+    <!-- quick check on sdk.dir -->
+    <fail message="sdk.dir is missing. Make sure to generate local.properties using &apos;android update project&apos; or to inject it through an env var"
+        unless="sdk.dir" />
+
+    <!-- version-tag: 1 -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties" >
+        <classpath>
+            <pathelement location="${ant.home}/lib/ant-contrib-1.0b3.jar" />
+        </classpath>
+    </taskdef>
+
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+
+    <target name="deploy" >
+        <foreach delimiter="," list="${market_channels}" param="channel" target="modify_manifest" >
+        </foreach>
+    </target>
+
+    <target name="modify_manifest" >
+        <replaceregexp byline="false" flags="g" >
+            <regexp pattern="android:name=&quot;UMENG_CHANNEL&quot; android:value=&quot;(.*)&quot;" />
+            <substitution expression="android:name=&quot;UMENG_CHANNEL&quot; android:value=&quot;${channel}&quot;" />
+            <fileset  dir="" includes="AndroidManifest.xml" />
+        </replaceregexp>
+        
+        <antcall target="clean" />
+        <antcall target="release" />
+
+        <copy tofile="${channel.path}/${ant.project.name}_${channel}.apk" >
+            <fileset dir="${out.absolute.dir}/" includes="${ant.project.name}-release.apk" />
+        </copy>
+
+        <delete includeEmptyDirs="true" >
+            <fileset dir="${out.absolute.dir}" includes="**/*" />
+        </delete>
+
+        <echo message="===========================" />
+    </target>
+
+</project>

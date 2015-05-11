@@ -10,8 +10,10 @@ import android.view.Window;
 
 import com.hr.aframe.R;
 import com.hr.aframe.util.ActivityStackManager;
+import com.umeng.analytics.MobclickAgent;
 
 public abstract class AbBaseFragmentActivity extends FragmentActivity {
+	protected static String TAG;
 	protected Context mContext;
 	protected BaseGsonService mBaseGsonService;
 
@@ -32,6 +34,7 @@ public abstract class AbBaseFragmentActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		TAG = this.getClass().getSimpleName();
 		/**
 		 * 添加进入动画
 		 * */
@@ -41,6 +44,7 @@ public abstract class AbBaseFragmentActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(getLayoutResID());
 		mContext = this;
+
 		mBaseGsonService = new BaseGsonService(this, generateTag());
 		ActivityStackManager.getService().pushActivity(this);
 		initValues();
@@ -77,6 +81,22 @@ public abstract class AbBaseFragmentActivity extends FragmentActivity {
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		MobclickAgent.onPageStart(TAG);
+		MobclickAgent.onResume(this);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPageEnd(TAG);
+		MobclickAgent.onPause(this);
 	}
 
 	@Override
