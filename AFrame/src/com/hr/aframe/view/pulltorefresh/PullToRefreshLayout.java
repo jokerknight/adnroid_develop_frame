@@ -54,6 +54,10 @@ public class PullToRefreshLayout extends ViewGroup {
 	private int mEvents;
 	private boolean isFirstOnLayout = true;
 	private boolean isTouch;
+	/**
+	 * 所有数据是加载完了吗？ true：加载完了
+	 * */
+	private boolean isLoadOver;
 
 	private OnRefreshListener mOnRefreshListener;
 
@@ -127,6 +131,9 @@ public class PullToRefreshLayout extends ViewGroup {
 				// pull up
 				else if (((IPullable) mPullableView).canPullUp() && mPullY < 0
 						&& mCurrentState != REFRESHING) {
+					if (isLoadOver) {
+						changeState(LOAD_OVER);
+					}
 					if (mCurrentState != LOAD_OVER) {
 						// original version start
 						if (Math.abs(mPullY) > mLoadmoreDist) {
@@ -170,7 +177,8 @@ public class PullToRefreshLayout extends ViewGroup {
 				ev.setAction(MotionEvent.ACTION_CANCEL);
 			}
 			if (mPullY > 0) {
-				if (mPullY >= mRefreshDist) {
+				// 如果正在刷新中，触摸屏幕不想刷新头被关掉，使用mPullY >= mRefreshDist
+				if (mPullY > mRefreshDist) {
 					mPullY = mRefreshDist;
 					if (mCurrentState != REFRESHING) {
 						changeState(REFRESHING);
@@ -185,9 +193,13 @@ public class PullToRefreshLayout extends ViewGroup {
 				}
 				requestLayout();
 			} else if (mPullY < 0) {
+				if (isLoadOver) {
+					changeState(LOAD_OVER);
+				}
 				if (mCurrentState != LOAD_OVER) {
+					// 如果正在加载中，触摸屏幕不想加载脚被关掉，使用Math.abs(mPullY) >= mRefreshDist
 					// original version start
-					if (Math.abs(mPullY) >= mLoadmoreDist) {
+					if (Math.abs(mPullY) > mLoadmoreDist) {
 						mPullY = -mLoadmoreDist;
 						if (mCurrentState != LOADING) {
 							changeState(LOADING);
@@ -298,8 +310,11 @@ public class PullToRefreshLayout extends ViewGroup {
 				mPullY = 0;
 				requestLayout();
 			}
-			if (null != msg.obj && (boolean) msg.obj) {
+			// 下拉刷新完成后，恢复上拉加载
+			isLoadOver = false;
+			if (null != msg.obj && (Boolean) msg.obj) {
 				changeState(LOAD_OVER);
+				isLoadOver = true;
 			}
 		};
 	};
