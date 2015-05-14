@@ -238,8 +238,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
 	 * @param ctx
 	 */
 	private synchronized void sendCrashReportsToServer(final Context ctx) {
-		if (null == mSubmitServerSetting)
-			throw new RuntimeException("Submit to Server Method is not Setting");
 		new Thread(new Runnable() {
 
 			@Override
@@ -282,7 +280,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
 	private void postReport(File file) {
 		// TODO 使用HTTP Post 发送错误报告到服务器
-		mSubmitServerSetting.onSetting(file);
+		if (null == mSubmitServerSetting)
+			mSubmitServerSetting.onSetting(file);
 	}
 
 	/**
