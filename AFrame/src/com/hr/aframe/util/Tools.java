@@ -1,5 +1,12 @@
 package com.hr.aframe.util;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -61,5 +68,29 @@ public class Tools {
 		int id = context.getResources()
 				.getIdentifier(name, defType, defPackage);
 		return id;
+	}
+
+	public static String getFileCotent(File file) {
+		String content = "";
+		try {
+			if (null == file || null != file && !file.exists()) {
+				return null;
+			}
+			InputStream is = new FileInputStream(file);
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader buffreader = new BufferedReader(isr);
+			String line;
+			// 分行读取
+			while ((line = buffreader.readLine()) != null) {
+				content += line + "\n";
+			}
+			is.close();
+			return content;
+		} catch (java.io.FileNotFoundException e) {
+			XLog.d("TestFile", "The File doesn't not exist.");
+		} catch (IOException e) {
+			XLog.d("TestFile", e.getMessage());
+		}
+		return null;
 	}
 }

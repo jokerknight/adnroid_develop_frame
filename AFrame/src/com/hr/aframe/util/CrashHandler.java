@@ -238,7 +238,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 	 * @param ctx
 	 */
 	private synchronized void sendCrashReportsToServer(final Context ctx) {
-		if (null == mSubmitServerMethodSetting)
+		if (null == mSubmitServerSetting)
 			throw new RuntimeException("Submit to Server Method is not Setting");
 		new Thread(new Runnable() {
 
@@ -282,7 +282,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
 	private void postReport(File file) {
 		// TODO 使用HTTP Post 发送错误报告到服务器
-		mSubmitServerMethodSetting.onSetting(file);
+		mSubmitServerSetting.onSetting(file);
 	}
 
 	/**
@@ -292,20 +292,19 @@ public class CrashHandler implements UncaughtExceptionHandler {
 		sendCrashReportsToServer(mContext);
 	}
 
-	public SubmitServerMethodSetting mSubmitServerMethodSetting;
+	public ISubmitServerSetting mSubmitServerSetting;
 
 	/**
 	 * 向服务器提交日志，设置接口
 	 * */
-	interface SubmitServerMethodSetting {
+	public interface ISubmitServerSetting {
 		/**
 		 * 此方法中，采用get或post请求提交文件内容到服务器。 不需要另起线程
 		 * */
 		public void onSetting(File file);
 	}
 
-	public void setSubmitServerMethodSetting(
-			SubmitServerMethodSetting mSubmitServerMethodSetting) {
-		this.mSubmitServerMethodSetting = mSubmitServerMethodSetting;
+	public void submitServerSetting(ISubmitServerSetting submitServerSetting) {
+		this.mSubmitServerSetting = submitServerSetting;
 	}
 }
